@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private InputAction lookAction;
 
     private Rigidbody rb;
+    private float cameraPitch = 0f;
 
     private void Start()
     {
@@ -48,7 +49,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 lookDirection = lookAction.ReadValue<Vector2>();
         transform.Rotate(Vector3.up, lookDirection.x * lookSensitivity * Time.deltaTime);
-        playerCamera.transform.Rotate(Vector3.right, -lookDirection.y * lookSensitivity * Time.deltaTime);
+        // playerCamera.transform.Rotate(Vector3.right, -lookDirection.y * lookSensitivity * Time.deltaTime);
+
+        cameraPitch -= lookDirection.y * lookSensitivity * Time.deltaTime;
+        cameraPitch = Mathf.Clamp(cameraPitch, -90f, 90f);
+        playerCamera.transform.localEulerAngles = new Vector3(cameraPitch, 0f, 0f);
     }
 
     private void Jump(InputAction.CallbackContext context)
